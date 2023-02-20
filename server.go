@@ -24,7 +24,6 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
-	// Setup protocol scheme for the Prisma client
 
 	// Create a new resolver, passing the Prisma client to its Prisma field
 	resolver := &graph.Resolver{Prisma: prisma}

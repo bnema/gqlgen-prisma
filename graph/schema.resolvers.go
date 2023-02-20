@@ -31,6 +31,8 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 		result = append(result, &model.User{
 			ID:    user.ID,
 			Email: user.Email,
+			Name:  user.Name,
+			Image: user.Image,
 		})
 	}
 	return result, nil

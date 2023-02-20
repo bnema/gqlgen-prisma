@@ -1,6 +1,7 @@
 # GraphQL schema example
 #
 # https://gqlgen.com/getting-started/
+scalar DateTime
 
 type Post {
   id: ID!
@@ -10,10 +11,6 @@ type Post {
   updatedAt: DateTime!
   published: Boolean!
   author: User!
-}
-
-type DateTime {
-  time: String!
 }
 
 type User {

@@ -20,6 +20,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, name string, email st
 	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
 }
 
+// User is the resolver for the user field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	users, err := r.Prisma.User.FindMany().Exec(ctx)
 	if err != nil {
@@ -33,6 +34,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 			Email: user.Email,
 			Name:  user.Name,
 			Image: user.Image,
+			Posts: nil,
 		})
 	}
 	return result, nil
@@ -40,7 +42,24 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 
 // Posts is the resolver for the posts field.
 func (r *queryResolver) Posts(ctx context.Context) ([]*model.Post, error) {
-	panic(fmt.Errorf("not implemented: Posts - posts"))
+	posts, err := r.Prisma.Post.FindMany().Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*model.Post
+	for _, post := range posts {
+		result = append(result, &model.Post{
+			ID:        post.ID,
+			Title:     post.Title,
+			Content:   post.Content,
+			Published: post.Published,
+			CreatedAt: post.CreatedAt.GoString(),
+			UpdatedAt: post.UpdatedAt.GoString(),
+		})
+	}
+
+	return result, nil
 }
 
 // Mutation returns MutationResolver implementation.

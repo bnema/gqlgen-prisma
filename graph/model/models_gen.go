@@ -2,10 +2,6 @@
 
 package model
 
-type DateTime struct {
-	Time string `json:"time"`
-}
-
 type NewPost struct {
 	Title       string `json:"title"`
 	Content     string `json:"content"`
@@ -14,13 +10,13 @@ type NewPost struct {
 }
 
 type Post struct {
-	ID        string    `json:"id"`
-	Title     string    `json:"title"`
-	Content   string    `json:"content"`
-	CreatedAt *DateTime `json:"createdAt"`
-	UpdatedAt *DateTime `json:"updatedAt"`
-	Published bool      `json:"published"`
-	Author    *User     `json:"author"`
+	ID        string `json:"id"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	Published bool   `json:"published"`
+	Author    *User  `json:"author"`
 }
 
 type User struct {

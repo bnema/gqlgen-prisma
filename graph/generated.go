@@ -44,10 +44,6 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	DateTime struct {
-		Time func(childComplexity int) int
-	}
-
 	Mutation struct {
 		CreatePost func(childComplexity int, input model.NewPost) int
 		CreateUser func(childComplexity int, name string, email string, image string) int
@@ -100,13 +96,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
-
-	case "DateTime.time":
-		if e.complexity.DateTime.Time == nil {
-			break
-		}
-
-		return e.complexity.DateTime.Time(childComplexity), true
 
 	case "Mutation.createPost":
 		if e.complexity.Mutation.CreatePost == nil {
@@ -419,50 +408,6 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _DateTime_time(ctx context.Context, field graphql.CollectedField, obj *model.DateTime) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DateTime_time(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Time, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DateTime_time(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DateTime",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_createPost(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createPost(ctx, field)
 	if err != nil {
@@ -757,9 +702,9 @@ func (ec *executionContext) _Post_createdAt(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.DateTime)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNDateTime2ᚖgraphqlᚑprismaᚑapiᚋgraphᚋmodelᚐDateTime(ctx, field.Selections, res)
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Post_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -769,11 +714,7 @@ func (ec *executionContext) fieldContext_Post_createdAt(ctx context.Context, fie
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "time":
-				return ec.fieldContext_DateTime_time(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DateTime", field.Name)
+			return nil, errors.New("field of type DateTime does not have child fields")
 		},
 	}
 	return fc, nil
@@ -805,9 +746,9 @@ func (ec *executionContext) _Post_updatedAt(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.DateTime)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNDateTime2ᚖgraphqlᚑprismaᚑapiᚋgraphᚋmodelᚐDateTime(ctx, field.Selections, res)
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Post_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -817,11 +758,7 @@ func (ec *executionContext) fieldContext_Post_updatedAt(ctx context.Context, fie
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "time":
-				return ec.fieldContext_DateTime_time(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DateTime", field.Name)
+			return nil, errors.New("field of type DateTime does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3237,34 +3174,6 @@ func (ec *executionContext) unmarshalInputNewPost(ctx context.Context, obj inter
 
 // region    **************************** object.gotpl ****************************
 
-var dateTimeImplementors = []string{"DateTime"}
-
-func (ec *executionContext) _DateTime(ctx context.Context, sel ast.SelectionSet, obj *model.DateTime) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, dateTimeImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DateTime")
-		case "time":
-
-			out.Values[i] = ec._DateTime_time(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var mutationImplementors = []string{"Mutation"}
 
 func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -3840,14 +3749,19 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNDateTime2ᚖgraphqlᚑprismaᚑapiᚋgraphᚋmodelᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *model.DateTime) graphql.Marshaler {
-	if v == nil {
+func (ec *executionContext) unmarshalNDateTime2string(ctx context.Context, v interface{}) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNDateTime2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
-		return graphql.Null
 	}
-	return ec._DateTime(ctx, sel, v)
+	return res
 }
 
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {

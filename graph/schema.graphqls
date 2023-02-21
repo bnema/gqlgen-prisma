@@ -11,6 +11,7 @@ type Post {
   updatedAt: DateTime!
   published: Boolean!
   author: User!
+  authorId: ID!
 }
 
 type User {

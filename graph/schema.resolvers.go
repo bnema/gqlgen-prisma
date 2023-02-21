@@ -34,9 +34,11 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 			Email: user.Email,
 			Name:  user.Name,
 			Image: user.Image,
-			Posts: nil,
+			// Posts is a list of posts that the user has written (user.ID = post.authorID)
+			Posts: []*model.Post{},
 		})
 	}
+
 	return result, nil
 }
 
@@ -56,6 +58,9 @@ func (r *queryResolver) Posts(ctx context.Context) ([]*model.Post, error) {
 			Published: post.Published,
 			CreatedAt: post.CreatedAt.GoString(),
 			UpdatedAt: post.UpdatedAt.GoString(),
+			Author: &model.User{
+				ID: post.AuthorID,
+			},
 		})
 	}
 

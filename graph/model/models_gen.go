@@ -17,6 +17,7 @@ type Post struct {
 	UpdatedAt string `json:"updatedAt"`
 	Published bool   `json:"published"`
 	Author    *User  `json:"author"`
+	AuthorID  string `json:"authorId"`
 }
 
 type User struct {
